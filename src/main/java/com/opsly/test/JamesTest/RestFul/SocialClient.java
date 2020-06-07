@@ -14,36 +14,42 @@ import java.util.concurrent.CompletableFuture;
 
 import com.fasterxml.jackson.core.io.JsonEOFException;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 @Service
 public class SocialClient {
     RestTemplate restTemplate = new RestTemplate();
-    static final int MAX_RETRIES = 10;
+    static final int MAX_RETRIES = 5;
 
     private static RetryPolicy retryPolicy = new RetryPolicy().withMaxRetries(MAX_RETRIES);
 
     public JsonArray getDataFromUrl(String url) {
 
-        return Failsafe.with(retryPolicy).get(() -> restTemplate.getForObject(url, JsonArray.class));
+        JsonParser parser = new JsonParser();
+        String socialData = restTemplate.getForObject(url, String.class);
+        JsonElement socialdataElement = parser.parse(socialData) ;
+        JsonArray returnArray =  socialdataElement.getAsJsonArray();
+
+        return returnArray;
+
 
     }
-    
 
     public JsonArray getArrayFromUrl(String url, String type) {
         final JsonArray jsonArray = new JsonArray();
 
-        JsonArray data = getDataFromUrl(url);
-        for (JsonElement datapointElement: data) {
-            JsonObject datapointObject = datapointElement.getAsJsonObject(); 
+        JsonArray data =  Failsafe.with(retryPolicy) .get(() -> getDataFromUrl(url));
+        for (JsonElement datapointElement : data) {
+            JsonObject datapointObject = datapointElement.getAsJsonObject();
             String dataToAdd = datapointObject.get(type).getAsString();
             jsonArray.add(dataToAdd);
         }
 
         return jsonArray;
     }
-
 
 }

@@ -28,7 +28,7 @@ public class RestFulController {
     public JsonObject GetData() {
         JsonArray twitter = socialClient.getArrayFromUrl("https://takehome.io/twitter", "tweet");
         JsonArray facebook = socialClient.getArrayFromUrl("https://takehome.io/facebook", "status");
-        JsonArray instragram = socialClient.getArrayFromUrl("https://takehome.io/instragram", "picture");
+        JsonArray instragram = socialClient.getArrayFromUrl("https://takehome.io/instagram", "picture");
         JsonObject result = new JsonObject();
         result.add("twitter", twitter);
         result.add("facebook", facebook);
