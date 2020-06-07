@@ -25,7 +25,7 @@ public class RestFulController {
     private SocialClient socialClient;
 
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public JsonObject GetData() {
+    public String GetData() {
         JsonArray twitter = socialClient.getArrayFromUrl("https://takehome.io/twitter", "tweet");
         JsonArray facebook = socialClient.getArrayFromUrl("https://takehome.io/facebook", "status");
         JsonArray instragram = socialClient.getArrayFromUrl("https://takehome.io/instagram", "picture");
@@ -33,7 +33,7 @@ public class RestFulController {
         result.add("twitter", twitter);
         result.add("facebook", facebook);
         result.add("instragram", instragram);
-        return result;
+        return result.toString();
     }
 
 }
