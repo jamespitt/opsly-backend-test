@@ -4,5 +4,6 @@ import lombok.Data;
 
 @Data
 public class SocialData {
+    private String data;
 
 }

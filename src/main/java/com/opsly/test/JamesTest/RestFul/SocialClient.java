@@ -10,10 +10,16 @@ import java.util.concurrent.CompletableFuture;
 public class SocialClient {
     RestTemplate restTemplate = new RestTemplate();
 
-
     @Async
-    public CompletableFuture<SocialData> getCountriesByLanguage(String url) {
-        SocialData response = restTemplate.getForObject(url, SocialData.class);
+    public CompletableFuture<SocialData> getDataFromUrl(String url) {
+        SocialData response;
+
+        // try {
+        response = restTemplate.getForObject(url, SocialData.class);
+        // } catch (Exception e) {
+        //
+
+        // }
 
         return CompletableFuture.completedFuture(response);
     }
