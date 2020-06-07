@@ -26,31 +26,23 @@ public class SocialClient {
     private static RetryPolicy retryPolicy = new RetryPolicy().withMaxRetries(MAX_RETRIES);
 
     public JsonArray getDataFromUrl(String url) {
-        // Gson gson = new Gson();
-
-        // try {
 
         return Failsafe.with(retryPolicy).get(() -> restTemplate.getForObject(url, JsonArray.class));
-        // } catch (Exception e) {
-        //
-
-        // }
 
     }
     
 
-    public List<String> getListFromUrl(String url, String type) {
-        List<String> list = new ArrayList<String>();
+    public JsonArray getArrayFromUrl(String url, String type) {
+        final JsonArray jsonArray = new JsonArray();
 
         JsonArray data = getDataFromUrl(url);
         for (JsonElement datapointElement: data) {
             JsonObject datapointObject = datapointElement.getAsJsonObject(); 
             String dataToAdd = datapointObject.get(type).getAsString();
-            list.add(dataToAdd);
-
+            jsonArray.add(dataToAdd);
         }
 
-        return list;
+        return jsonArray;
     }
 
 

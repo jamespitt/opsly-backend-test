@@ -1,8 +1,11 @@
 package com.opsly.test.JamesTest.RestFul;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -22,21 +25,14 @@ public class RestFulController {
     private SocialClient socialClient;
 
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Object GetData() {
-        Object twitter = socialClient.getDataFromUrl("https://takehome.io/twitter");
-        Object facebook = socialClient.getDataFromUrl("https://takehome.io/facebook");
-        Object instragram = socialClient.getDataFromUrl("https://takehome.io/instragram");
-        // CompletableFuture<SocialData> =
-        // socialClient.getDataFromUrl("https://takehome.io/twitter");
-        // CompletableFuture<SocialData> =
-        // socialClient.getDataFromUrl("https://takehome.io/twitter");
-        Object result = new Object();
-        try {
-            result = twitter.get();
-
-        } catch (Throwable e) {
-            //
-        }
+    public JsonObject GetData() {
+        JsonArray twitter = socialClient.getArrayFromUrl("https://takehome.io/twitter", "tweet");
+        JsonArray facebook = socialClient.getArrayFromUrl("https://takehome.io/facebook", "status");
+        JsonArray instragram = socialClient.getArrayFromUrl("https://takehome.io/instragram", "picture");
+        JsonObject result = new JsonObject();
+        result.add("twitter", twitter);
+        result.add("facebook", facebook);
+        result.add("instragram", instragram);
         return result;
     }
 
