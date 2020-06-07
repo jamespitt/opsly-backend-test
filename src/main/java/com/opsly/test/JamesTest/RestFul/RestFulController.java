@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 public class RestFulController {
 
-    @RequestMapping(value = "/api", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public String GetData() {
         return "{}";
     }
