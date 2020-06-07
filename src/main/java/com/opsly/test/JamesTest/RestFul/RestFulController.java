@@ -2,6 +2,7 @@ package com.opsly.test.JamesTest.RestFul;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -26,13 +27,18 @@ public class RestFulController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public String GetData() {
-        JsonArray twitter = socialClient.getArrayFromUrl("https://takehome.io/twitter", "tweet");
-        JsonArray facebook = socialClient.getArrayFromUrl("https://takehome.io/facebook", "status");
-        JsonArray instragram = socialClient.getArrayFromUrl("https://takehome.io/instagram", "picture");
+        Future<JsonArray> twitter = socialClient.getArrayFromUrl("https://takehome.io/twitter", "tweet");
+        Future<JsonArray> facebook = socialClient.getArrayFromUrl("https://takehome.io/facebook", "status");
+        Future<JsonArray> instagram = socialClient.getArrayFromUrl("https://takehome.io/instagram", "picture");
+
         JsonObject result = new JsonObject();
-        result.add("twitter", twitter);
-        result.add("facebook", facebook);
-        result.add("instragram", instragram);
+
+        while (!twitter.isDone() && !facebook.isDone() && !instagram.isDone()) {
+            Thread.sleep(300);
+        }
+        result.add("twitter", twitter.get());
+        result.add("facebook", facebook.get());
+        result.add("instagram", instagram.get());
         return result.toString();
     }
 
