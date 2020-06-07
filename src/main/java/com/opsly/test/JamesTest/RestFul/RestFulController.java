@@ -33,12 +33,17 @@ public class RestFulController {
 
         JsonObject result = new JsonObject();
 
-        while (!twitter.isDone() && !facebook.isDone() && !instagram.isDone()) {
-            Thread.sleep(300);
+        try {
+
+            while (!twitter.isDone() && !facebook.isDone() && !instagram.isDone()) {
+                Thread.sleep(300);
+            }
+            result.add("twitter", twitter.get());
+            result.add("facebook", facebook.get());
+            result.add("instagram", instagram.get());
+        } catch (Exception e) {
+            return "Error with call - " + e.getMessage();
         }
-        result.add("twitter", twitter.get());
-        result.add("facebook", facebook.get());
-        result.add("instagram", instagram.get());
         return result.toString();
     }
 
